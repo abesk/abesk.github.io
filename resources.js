@@ -18,7 +18,7 @@ var images = {
         image: new Image(),
     },
     pumpkinChild: {
-        url: "images/pumpkinChild.png",
+        url: "images/pumpkinchild.png",
         image: new Image(),
     },
     alkoFront: {
@@ -62,7 +62,7 @@ var images = {
         image: new Image(),
     },
     womanCry: {
-        url: "images/womanCry.png",
+        url: "images/womancry.png",
         image: new Image(),
     },
     house: {
