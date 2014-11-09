@@ -97,11 +97,30 @@ document.addEventListener("keydown", function (event) {
 
 loadResources();
 
+var place1 ={
+    x:55,
+    y: 55 * (map.length - 2)
+}
+
+var place2 = {
+    x :55 * (map[0].length - 2),
+    y: 55 * (map.length - 2)
+}
+
 var pumpkins = [
-    new Pumpkin(55, 55 * (map.length - 2)),
-    new Pumpkin(55 * (map[0].length - 2), 55 * (map.length - 2)),
+    new Pumpkin(place1.x, place1.y),
+    new Pumpkin(place2.x, place2.y),
             //new Pumpkin(18*55, 6*55, 2)
 ]
+var max = 10;
+var interval = setInterval(function(){
+    if(--max > 0){
+        pumpkins.push( new Pumpkin(place1.x, place1.y));
+        pumpkins.push(new Pumpkin(place2.x, place2.y));
+    } else{
+        clearInterval(interval);
+    }
+}, 2000);
 
 
 var smashed = [];
