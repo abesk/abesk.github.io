@@ -94,162 +94,15 @@ document.addEventListener("keydown", function (event) {
     return false;
 });
 
-var numImages = 13;
-var images = {
-    ground: {
-        url: "images/ground.png",
-        image: new Image(),
-    },
-    ker: {
-        url: "images/ker.png",
-        image: new Image(),
-    },
-    evilPumpkin: {
-        url: "images/evilPumpkinSmall.png",
-        image: new Image(),
-    },
-    smashedPumpkin: {
-        url: "images/smashed.png",
-        image: new Image(),
-    },
-    alkoFront: {
-        url: "images/alkoFrontSmall.png",
-        image: new Image(),
-    },
-    alkoLeft0: {
-        url: "images/alkoLeftSmall0.png",
-        image: new Image(),
-    },
-    alkoLeft1: {
-        url: "images/alkoLeftSmall1.png",
-        image: new Image(),
-    },
-    alkoLeft2: {
-        url: "images/alkoLeftSmall2.png",
-        image: new Image(),
-    },
-    alkoLeft3: {
-        url: "images/alkoLeftSmall1.png",
-        image: new Image(),
-    },
-    alkoRight1: {
-        url: "images/alkoRightSmall.png",
-        image: new Image(),
-    },
-    alkoRight3: {
-        url: "images/alkoRightSmall.png",
-        image: new Image(),
-    },
-    alkoRight2: {
-        url: "images/alkoRightSmall2.png",
-        image: new Image(),
-    },
-    alkoRight0: {
-        url: "images/alkoRightSmall0.png",
-        image: new Image(),
-    },
-    woman: {
-        url: "images/woman.png",
-        image: new Image(),
-    },
-    house: {
-        url: "images/dom.png",
-        image: new Image(),
-    },
-    strom: {
-        url: "images/stromT.png",
-        image: new Image(),
-    },
-}
-for (var i in images) {
-    images[i].image.onload = function () {
-        if (--numImages == 0) {
-            animate();
-        }
-    }
-    images[i].image.src = images[i].url;
-}
 
-
-var alko = {
-    x: 55 * 1 + 55 / 2,
-    y: 55 * 1 + 55 / 2,
-    width: 22,
-    height: 50,
-    speedX: 0,
-    speedY: 0,
-    accelerationX: 0,
-    accelerationY: 0,
-    scaleX: 1,
-    scaleY: 0,
-    velocityX: 0,
-    velocityY: 0,
-    frame: 0
-}
-
-
-
-var Pumpkin = function (x, y, dir) {
-    this.x = x || 0;
-    this.y = y || 0;
-    this.direction = dir || 0;
-
-
-
-    var moveToDirection = function (direction) {
-        direction = direction % 4;
-        if (direction == 0) {
-            return [0, -1];
-        } else if (direction == 1) {
-            return [1, 0];
-        }
-        else if (direction == 2) {
-            return [0, 1];
-
-        } else if (direction == 3) {
-            return [-1, 0];
-        }
-        console.log(direction);
-        return [0, 0];
-    }
-
-    this.move = function () {
-        var move = moveToDirection(this.direction);
-        this.x += move[0] * 2.75;
-        this.y += move[1] * 2.75;
-
-    }
-
-    this.nextMove = function () {
-        var x = this.x / 55;
-        var y = this.y / 55;
-        var right = moveToDirection(this.direction + 1);
-        var up = moveToDirection(this.direction);
-
-        var left = moveToDirection(this.direction + 3);
-        var down = moveToDirection(this.direction + 2);
-
-        if (map[y + right[1]][x + right[0]] == " ") {
-            this.direction += 1;
-        } else if (map[y + up[1]][x + up[0]] == " ") {
-            //do nothing
-        } else if (map[y + left[1]][x + left[0]] == " ") {
-            this.direction += 3;
-        } else {
-            this.direction += 2;
-        }
-
-        this.direction = this.direction % 4;
-
-    }
-
-}
+loadResources();
 
 var pumpkins = [
     new Pumpkin(55, 55 * (map.length - 2)),
     new Pumpkin(55 * (map[0].length - 2), 55 * (map.length - 2)),
             //new Pumpkin(18*55, 6*55, 2)
 ]
+
 
 var smashed = [];
 
@@ -332,7 +185,9 @@ function animate() {
             width: 25,
             height: 25
         })) {
-
+            if(pumpkins[i].hasChild){
+                mother.hasChild = true;
+            }
             smashed.push(pumpkins[i]);
             delete pumpkins[i];
         }
@@ -340,6 +195,10 @@ function animate() {
 
     pumpkins.forEach(function (pumpkin) {
         if (pumpkin.x % 55 == 0 && pumpkin.y % 55 == 0) {
+            if(mother.hasChild && pumpkin.x == mother.x && pumpkin.y == mother.y){
+                pumpkin.hasChild= true;
+                mother.hasChild = false;
+            }
             pumpkin.nextMove();
         }
         pumpkin.move();
@@ -385,14 +244,23 @@ function animate() {
                 pumpkin.rendered = true;
             }
         })
+        if(y == 0){
+            ctx.drawImage(images.house.image, 1000, 0);
+            if(mother.hasChild){
+                 ctx.drawImage(images.woman.image, mother.x+10, mother.y - 69 + 55);
+            } else{
+                 ctx.drawImage(images.womanCry.image, mother.x+10, mother.y - 69 + 55);
+            }
+           
+        }
         if (!alinoDrawed && alko.y < y * 55 + 55) {
             ctx.drawImage(alkoImg, alko.x + xOffset, alko.y + yOffset + 55);
             alinoDrawed = true;
         }
     }
 
-    ctx.drawImage(images.house.image, 1000, 0);
-    ctx.drawImage(images.woman.image, 1110, 25);
+    
+    
     smashed.forEach(function (pumpkin) {
         if(!pumpkin.rendered){
             ctx.drawImage(images.smashedPumpkin.image, pumpkin.x, pumpkin.y + 11 + 55);
@@ -404,8 +272,13 @@ function animate() {
             ctx.drawImage(alkoImg, alko.x + xOffset, alko.y + yOffset + 55);
             alinoDrawed = true;
         }
-        ctx.drawImage(images.evilPumpkin.image, pumpkin.x, pumpkin.y + 55);
+        if(pumpkin.hasChild){
+            ctx.drawImage(images.pumpkinChild.image, pumpkin.x, pumpkin.y + 55);
+        } else{
+            ctx.drawImage(images.evilPumpkin.image, pumpkin.x, pumpkin.y + 55);
 
+        }
+        
     });
     if (!alinoDrawed) {
         ctx.drawImage(alkoImg, alko.x + xOffset, alko.y + yOffset + 55);
