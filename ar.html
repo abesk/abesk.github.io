@@ -1,4 +1,4 @@
-!DOCTYPE html>
+
 <!-- include aframe -->
 <script src="https://cdn.rawgit.com/jeromeetienne/AR.js/1.5.0/aframe/examples/vendor/aframe/build/aframe.min.js"></script>
 <script src="https://cdn.rawgit.com/jeromeetienne/AR.js/1.5.0/aframe/build/aframe-ar.js"></script>
@@ -12,9 +12,9 @@
 
 		<!-- define the object which gonna be put on this marker  -->
 		
-			<a-text value="SAMO" geometry="primitive:plane">
+			<a-collada-model src="samo.dae">
 				<a-animation attribute="rotation" to="360 0 0" dur="3000" easing='linear' repeat="indefinite"></a-animation>
-			</a-text>
+			</a-collada-model>
 	
 		<a-marker-camera preset='hiro'></a-marker-camera>
 	</a-scene>
