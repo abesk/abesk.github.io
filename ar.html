@@ -17,18 +17,37 @@
 		<a-camera-static/>
 	</a-scene-->
    <!-- enable artoolkit on this scene -->
-	<a-scene embedded arjs='sourceType: webcam; detectionMode: mono; maxDetectionRate: 30; canvasWidth: 240; canvasHeight: 180'>
+	<a-scene embedded arjs='sourceType: webcam; detectionMode: mono_and_matrix; matrixCodeType: 3x3;'>
+		<!-- handle unknown marker -->
+		<!-- <a-marker type='unknown'>
+			<a-box depth="1" height="1" width="1" position='0 0.5 0' material='opacity: 0.5; side:double; color:blue;'></a-box>
+		</a-marker> -->
 
-		
-       <a-assets>
-      <a-asset-item id="optimerBoldFont" src="https://rawgit.com/mrdoob/three.js/dev/examples/fonts/optimer_bold.typeface.json"></a-asset-item>
-    </a-assets>
-			   <a-box src="https://abesk.github.io/lids.png">  
+		<!-- handle hiro marker -->
+		<a-marker preset='hiro'>
+			  <a-box src="https://abesk.github.io/lids.png">  
    		     <a-animation attribute="rotation" to="-90 0 360" dur="3000" easing='linear' repeat="indefinite"></a-animation>
    		  </a-box>
   
-	
-		<a-marker-camera preset='kanji'></a-marker-camera>
-      	
+		</a-marker>
+
+		<!-- handle hiro marker -->
+		<a-marker type='barcode' barcodeValue='5'>
+			  <a-box src="https://abesk.github.io/lids.png">  
+   		     <a-animation attribute="rotation" to="-90 0 360" dur="3000" easing='linear' repeat="indefinite"></a-animation>
+   		  </a-box>
+  
+		</a-marker>
+		
+		<!-- handle kanji marker -->
+		<a-marker preset='kanji'>
+		  <a-box src="https://abesk.github.io/lids.png">  
+   		     <a-animation attribute="rotation" to="-90 0 360" dur="3000" easing='linear' repeat="indefinite"></a-animation>
+   		  </a-box>
+  
+		</a-marker>
+		
+		<!-- add a simple camera -->
+		<a-entity camera></a-entity>
 	</a-scene>
 </body>
